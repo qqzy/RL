@@ -47,18 +47,13 @@ def policy_evaluation(policy_matrix, env, gamma=0.9, num_episodes=10, episode_le
                 current_rewards.append(reward)
                 
                 # 后续步骤: 遵循策略 policy_matrix
-                for _step_count in range(1, episode_length): # episode_length 是总步数
+                for _ in range(1, episode_length): # episode_length 是总步数
                     
                     # 将 current_env_state (元组) 转换为 s_idx 以用于策略查找
                     current_s_idx_for_policy = current_env_state[0] + current_env_state[1] * env.env_size[0]
 
                     action_probs = policy_matrix[current_s_idx_for_policy]
                     
-                    if not np.isclose(np.sum(action_probs), 1.0) and np.sum(action_probs) > 0: # Check if sums to 1, handle if not.
-                        # Normalize if not summing to 1 but positive, could be due to float precision
-                        action_probs = action_probs / np.sum(action_probs)
-                    elif np.sum(action_probs) == 0: # No valid action from policy
-                        break 
 
                     action_from_policy_idx = np.random.choice(n_actions, p=action_probs)
                     action_from_policy = env.action_space[action_from_policy_idx]
